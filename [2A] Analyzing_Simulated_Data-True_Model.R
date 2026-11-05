@@ -3,26 +3,26 @@ library(lubridate)
 library(glmmTMB)
 
 #Read in data
-flu_pi_weekly<-readRDS("./Data/flu_pneumonia_weekly.rds")
-flu_pi_weekly<-flu_pi_weekly[order(flu_pi_weekly$date), ]
+flu_pneu_weekly<-readRDS("./Data/flu_pneumonia_weekly.rds")
+flu_pneu_weekly<-flu_pneu_weekly[order(flu_pneu_weekly$date), ]
 
 #Data preparation
-year<-year(flu_pi_weekly$date)
-month<-month(flu_pi_weekly$date)
-time<-seq_along(flu_pi_weekly$date)
-mean(duplicated(flu_pi_weekly$date))  #Checking for duplicates
+year<-year(flu_pneu_weekly$date)
+month<-month(flu_pneu_weekly$date)
+time<-seq_along(flu_pneu_weekly$date)
+mean(duplicated(flu_pneu_weekly$date))  #Checking for duplicates
 
 #Load simulated data 
-load("Simulated_Data.RData")
+load("./Data/Simulated_Data.RData")
 pneumo<-y_sim
 x<-model.matrix(~as.factor(year) +
 		             as.factor(month))
 n<-length(pneumo)
-flu<-flu_pi_weekly$rate_overall
+flu<-flu_pneu_weekly$rate_overall
 
 #True applied to simulated data
 time_cat<-factor(time)
-group<-factor(rep(1, nrow(flu_pi_weekly)))
+group<-factor(rep(1, nrow(flu_pneu_weekly)))
 fit_sim_true<-glmmTMB(pneumo ~ as.factor(year) + 
 		                           as.factor(month) + 
 		                           flu + 

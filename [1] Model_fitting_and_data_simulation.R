@@ -5,20 +5,20 @@ library(glmmTMB)
 #Read in data
 #pneumonia and influenza deaths obtained from: https://data.cdc.gov/api/v3/views/pp7x-dyj2/
 #Flu hospitalizations:CDc Flu-Survnet data, accessed via CMU Delphu Epiportal 11/4/2026
-flu_pi_weekly<-readRDS("./Data/flu_pneumonia_weekly.rds")
-flu_pi_weekly<-flu_pi_weekly[order(flu_pi_weekly$date),]
+flu_pneu_weekly<-readRDS("./Data/flu_pneumonia_weekly.rds")
+flu_pneu_weekly<-flu_pneu_weekly[order(flu_pneu_weekly$date),]
 
 #Data preparation
-pneumo<-flu_pi_weekly$deaths_from_pneumonia
-flu<-flu_pi_weekly$rate_overall
-year<-year(flu_pi_weekly$date)
-month<-month(flu_pi_weekly$date)
-time<-seq_along(flu_pi_weekly$date)
-mean(duplicated(flu_pi_weekly$date))  #Checking for duplicates
+pneumo<-flu_pneu_weekly$deaths_from_pneumonia
+flu<-flu_pneu_weekly$rate_overall
+year<-year(flu_pneu_weekly$date)
+month<-month(flu_pneu_weekly$date)
+time<-seq_along(flu_pneu_weekly$date)
+mean(duplicated(flu_pneu_weekly$date))  #Checking for duplicates
 
 #Model fitting
 time_cat<-factor(time)
-group<-factor(rep(1, nrow(flu_pi_weekly)))
+group<-factor(rep(1, nrow(flu_pneu_weekly)))
 fit<-glmmTMB(pneumo ~ as.factor(year) + 
 		                  as.factor(month) + 
 		                  flu + 
@@ -59,6 +59,3 @@ af_true<-100.00*(1.00 - sum(lambda_true_cf)/sum(lambda_true))
 
 save(y_sim, af_true,
      file = "./Data/Simulated_Data.RData")
-
-
-

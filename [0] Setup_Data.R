@@ -30,7 +30,7 @@ flu_raw <- readRDS('./Data/flusurvnet_raw.rds')%>%
     left_join(flu_raw, by = "date") %>%
     mutate(rate_overall = tidyr::replace_na(rate_overall, 0))
 
-  combined <- pi_deaths %>%
+  combined <- pneumonia_deaths %>%
     inner_join(flu, by = "date") %>%
     arrange(date)
 
